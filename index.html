@@ -28,9 +28,12 @@
     }
 
     .couple {
-      width: 100%;
+      width: 60%;
+      max-width: 260px;
+      height: auto;
+      display: block;
+      margin: 20px auto;
       border-radius: 16px;
-      margin-top: 20px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     }
 
@@ -38,29 +41,29 @@
     p { font-size: 1.1rem; line-height: 1.6; }
 
     button {
-      margin-top: 25px;
-      padding: 12px 28px;
+      margin-top: 20px;
+      padding: 16px 20px;
       border: none;
-      border-radius: 30px;
-      font-size: 1rem;
+      border-radius: 999px;
+      font-size: 1.1rem;
       cursor: pointer;
       background: #fff;
       color: #ff6f91;
+      width: 100%;
+      max-width: 280px;
       transition: transform 0.2s, box-shadow 0.2s;
+      touch-action: manipulation;
     }
+
+    button:active { transform: scale(0.96); }
 
     button:hover {
       transform: scale(1.05);
       box-shadow: 0 10px 20px rgba(0,0,0,0.2);
     }
 
-    .hidden {
-      display: none;
-      margin-top: 20px;
-      font-size: 1.2rem;
-    }
+    .hidden { display: none; }
 
-    /* Heart */
     .heart {
       position: fixed;
       bottom: -40px;
@@ -97,7 +100,6 @@
       }
     }
 
-    /* Sparkle */
     .sparkle {
       position: fixed;
       width: 6px;
@@ -123,7 +125,10 @@
     </p>
     <img src="couple.jpg" alt="รูปคู่ของเรา" class="couple" />
 
-    <button onclick="showLove()">กดตรงนี้สิ 💌</button>
+    <div style="display:flex;flex-direction:column;gap:12px;align-items:center;">
+      <button onclick="window.showLove()">ตกลง 💖</button>
+      <button id="noBtn" ontouchstart="window.runAway()" onmouseover="window.runAway()" style="background:#ffd1dc;color:#ff4d6d;">ไม่ตกลง 😝</button>
+    </div>
   </div>
 
   <div class="card hidden" id="page2">
@@ -133,20 +138,32 @@
       ขอบคุณที่เข้ามาเป็นส่วนหนึ่งของชีวิตฉัน ❤️
     </p>
   </div>
-  </div>
 
   <script>
-    window.onload = () => {
-      setInterval(createHearts, 400);
+    window.onload = function () {
+      setInterval(window.createHearts, 400);
     };
 
-    function showLove() {
+    window.showLove = function () {
       document.getElementById('page1').classList.add('hidden');
       document.getElementById('page2').classList.remove('hidden');
-      createHearts();
-    }
+      window.createHearts();
+    };
 
-    function createHearts() {
+    window.runAway = function () {
+      const btn = document.getElementById('noBtn');
+      if (!btn) return;
+
+      const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+      const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+
+      const x = Math.random() * (vw - btn.offsetWidth) - vw / 2;
+      const y = Math.random() * (vh - btn.offsetHeight) - vh / 2;
+
+      btn.style.transform = `translate(${x}px, ${y}px)`;
+    };
+
+    window.createHearts = function () {
       for (let i = 0; i < 10; i++) {
         const heart = document.createElement('div');
         const size = 12 + Math.random() * 28;
@@ -171,7 +188,7 @@
           sparkle.remove();
         }, duration * 1000);
       }
-    }
+    };
   </script>
 </body>
 </html>
